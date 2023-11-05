@@ -1,6 +1,7 @@
 import json
 from tf_idf import calculate_document_length, calculate_tfidf
 import csv
+import time
 
 #realizar una consulta y retornar segun su scorecosine
 def search(query, inverted_index, document_lengths, total_docs, tfidf_data):
@@ -42,9 +43,10 @@ with open('tfidf_data.json', 'r') as tfidf_file:
     tfidf_data = json.load(tfidf_file)
 
 #print(tfidf_data['15970']['casual'])
+
 # Ejemplo de consulta
-query = 'casual'
-results = search(query, inverted_index, document_lengths, 44424, tfidf_data)
+# query = 'casual'
+# results = search(query, inverted_index, document_lengths, 44424, tfidf_data)
 
 #retornar el nombre del articulo
 def get_name(id):
@@ -54,7 +56,18 @@ def get_name(id):
             if row['id'] == id:
                 return row['productDisplayName']
 
+# Recibe y muestra a frontend
+results = None
+def for_user(query):
+    s_time = time.time()
+    results = search(query, inverted_index, document_lengths, 44424, tfidf_data)
+    e_time = time.time()
+    exe_time = e_time - s_time
+
+    product_names = [get_name(doc_id) for doc_id, _ in results]
+    return product_names, round(exe_time, 3)
+
 #imprimir los resultados
-for doc_id, score in results:
-    print(f'{get_name(doc_id)} - {score}')
+# for doc_id, score in results:
+    # print(f'{get_name(doc_id)} - {score}')
 

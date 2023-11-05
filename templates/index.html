@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Clothes Search Index</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+        <link
+            rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1 class="tittle">
+                Welcome to our clothing search engine
+            </h1>
+            
+            <div class="search-bar">
+                <div class="dropdown">
+                    <div id="drop-text" class="dropdown-text">
+                        <span id="span">Our index</span>
+                        <i id="icon" class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <ul id="list" class="dropdown-list">
+                        <li class="dropdown-list-item">Our index</li>
+                        <li class="dropdown-list-item">PSQL</li>
+                    </ul>
+                </div>
+
+                <form class="search-box" action="/" method="POST">
+                    <input name="input_text" type="text" id="search-input" placeholder="Search by our index..." />
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </form>
+            </div>
+
+            <div class="for_results">
+                {% if product_names %}
+                <!-- <h2>Product Names:</h2> -->
+                <ul>
+                    {% for name in product_names %}
+                    <li>{{ name }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="for_results">
+                {% if time %}
+                <p> Tiempo de ejecución: {{ time }} segundos</p>
+                {% endif %}
+            </div>
+
+            <div class="under">
+                Created by: Angel Mucha, Jean Pierre Sotomayor, Juan Torres
+            </div>
+        </div>
+
+    </body>
+
+    <script>
+        let dropdownBtnText = document.getElementById("drop-text");
+        let span = document.getElementById("span");
+        let icon = document.getElementById("icon");
+        let list = document.getElementById("list");
+        let input = document.getElementById("search-input");
+        let listItems = document.querySelectorAll(".dropdown-list-item");
+
+        dropdownBtnText.onclick = function () {
+            list.classList.toggle("show");
+            icon.style.rotate = "-180deg";
+        };
+
+        window.onclick = function (e) {
+            if (e.target.id !== "drop-text" && e.target.id !== "icon" && e.target.id !== "span") {
+                list.classList.remove("show");
+                icon.style.rotate = "0deg";
+            }
+        };
+
+        for (item of listItems) {
+            item.onclick = function (e) {
+                span.innerText = e.target.innerText;
+                if (e.target.innerText == "Our index") {
+                input.placeholder = "Search by our index...";
+                } else {
+                input.placeholder = "Search by " + e.target.innerText + "...";
+                }
+            };
+        }
+    </script>
+    
+</html>
