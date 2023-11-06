@@ -31,3 +31,20 @@ diccionario = {
 }
 
 print(diccionario)
+
+
+Cuando una matriz es simetrica?
+
+
+import nltk
+from nltk.corpus import stopwords
+
+# Descargar las stopwords para todos los idiomas
+nltk.download('stopwords')
+
+# Obtener la lista de idiomas para los cuales hay stopwords disponibles
+idiomas_con_stopwords = stopwords.fileids()
+
+# Imprimir la lista de idiomas
+print("Idiomas con stopwords disponibles:")
+print(idiomas_con_stopwords)
