@@ -27,6 +27,7 @@ def search(query, inverted_index, document_lengths, total_docs, tfidf_data):
 
     # Ordenar los documentos por puntaje coseno y retornar los 10 mejores
     results = sorted(cosine_scores.items(), key=lambda x: x[1], reverse=True)[:10]
+    results = [x for x in results if x[1] > 0]
 
     return results
 
