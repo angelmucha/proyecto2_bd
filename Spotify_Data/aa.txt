@@ -104,3 +104,45 @@ stopwords_english = set(stopwords.words(diccionario[idioma]))
 
 # Imprimir la lista de stopwords en inglés
 print(stopwords_english)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JUANMA
+PS C:\Users\jean.sotomayor> & "C:/Program Files/Python311/python.exe" c:/Users/jean.sotomayor/main.py
+['tl' 'en' 'it' 'es' 'et' 'fr' 'pl' 'nl' 'pt' nan 'id' 'de' 'no' 'da' 'ko'
+ 'ro' 'cy' 'sw' 'vi' 'so' 'tr' 'ru' 'sv' 'ja' 'hi' 'ar' 'cs' 'ca' 'hu'
+ 'sq' 'af' 'hr' 'el' 'fi' 'sk']
+Idiomas faltantes: ['tl', 'et', 'pl', 'nan', 'ko', 'cy', 'sw', 'vi', 'so', 'ja', 'hi', 'cs', 'sq', 'af', 'hr', 'sk']    16
+DASDA 35
