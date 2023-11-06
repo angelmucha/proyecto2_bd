@@ -48,3 +48,59 @@ idiomas_con_stopwords = stopwords.fileids()
 # Imprimir la lista de idiomas
 print("Idiomas con stopwords disponibles:")
 print(idiomas_con_stopwords)
+
+
+
+import nltk
+from nltk.corpus import stopwords
+
+# Descargar las stopwords para todos los idiomas
+nltk.download('stopwords')
+
+# Obtener la lista de idiomas para los cuales hay stopwords disponibles
+idiomas_con_stopwords = stopwords.fileids()
+
+# Imprimir la lista de idiomas
+print("Idiomas con stopwords disponibles:")
+print(idiomas_con_stopwords)
+
+
+diccionario = {
+    'ar': 'arabic',
+    'az': 'azerbaijani',
+    'eu': 'basque',
+    'bn': 'bengali',
+    'ca': 'catalan',
+    'zh': 'chinese',
+    'da': 'danish',
+    'nl': 'dutch',
+    'en': 'english',
+    'fi': 'finnish',
+    'fr': 'french',
+    'de': 'german',
+    'el': 'greek',
+    'he': 'hebrew',
+    'en': 'hinglish',# No hay código específico para 'hinglish', se usa 'en' (inglés) como alternativa
+    'hu': 'hungarian',
+    'id': 'indonesian',
+    'it': 'italian',
+    'kk': 'kazakh',
+    'ne': 'nepali',
+    'no': 'norwegian',
+    'pt': 'portuguese',
+    'ro': 'romanian',
+    'ru': 'russian',
+    'sl': 'slovene',
+    'es': 'spanish',
+    'sv': 'swedish',
+    'tg': 'tajik',
+    'tr': 'turkish'
+}
+
+
+# Obtener la lista de stopwords en inglés
+idioma='it'
+stopwords_english = set(stopwords.words(diccionario[idioma]))
+
+# Imprimir la lista de stopwords en inglés
+print(stopwords_english)
