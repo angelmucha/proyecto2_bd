@@ -17,37 +17,44 @@ tfidf_data={'es':{},'en':{},'it':{},'pt':{},'de':{}}
 
 
 #realizar una consulta y retornar segun su scorecosine
-def search(query, inverted_index, document_lengths, total_docs, tfidf_data,idioma):
-   # print("documentos de : ",document_lengths[idioma])
+def search(query, inverted_index, document_lengths, total_docs, tfidf_data, idioma):
+    try:
+        #print("documentos de : ",document_lengths[idioma])
 
-    query_tokens = query.split()
-   # print(query_tokens)
-    query_tfidf = {}
-    for term in query_tokens:
-        tfidf = calculate_tfidf(term, query_tokens, inverted_index[idioma], total_docs)
-        # print("term: ",term,"  ","tfidf: ",tfidf)
-        query_tfidf[term] = tfidf
+        query_tokens = query.split()
+        #print(query_tokens)
+        query_tfidf = {}
+        for term in query_tokens:
+            tfidf = calculate_tfidf(term, query_tokens, inverted_index[idioma], total_docs)
+            #print("term: ",term,"  ","tfidf: ",tfidf)
+            query_tfidf[term] = tfidf
 
-    query_length = calculate_document_length(query_tokens, inverted_index[idioma], total_docs)
-    #print(query_length)
-    cosine_scores = {}
-    for doc_id, doc_length in document_lengths[idioma].items():
-        #print("Doc_id: ",doc_id)
-        score = 0.0
-        for term, tfidf in query_tfidf.items():
-            if term in inverted_index[idioma]:
-                if doc_id in inverted_index[idioma][term]:
-                    score += tfidf * tfidf_data[idioma][doc_id][term]
-        score /= doc_length * query_length
-        cosine_scores[doc_id] = score
-   # print(cosine_scores)
-    # Ordenar los documentos por puntaje coseno y retornar los 10 mejores
-    results = sorted(cosine_scores.items(), key=lambda x: x[1], reverse=True)#[:10]
-    results = [x for x in results if x[1] != 0.0]
-    #-1 similitud perfecta pero en direcciones opuestas
-    #similitud perfecta
+        query_length = calculate_document_length(query_tokens, inverted_index[idioma], total_docs)
+        #print(query_length)
+        cosine_scores = {}
+        for doc_id, doc_length in document_lengths[idioma].items():
+            #print("Doc_id: ",doc_id)
+            score = 0.0
+            for term, tfidf in query_tfidf.items():
+                if term in inverted_index[idioma]:
+                    if doc_id in inverted_index[idioma][term]:
+                        score += tfidf * tfidf_data[idioma][doc_id][term]
+            score /= doc_length * query_length
+            cosine_scores[doc_id] = score
+        #print(cosine_scores)
+        # Ordenar los documentos por puntaje coseno y retornar los 10 mejores
+        results = sorted(cosine_scores.items(), key=lambda x: x[1], reverse=True)#[:10]
+        results = [x for x in results if x[1] > 0.0]
+        #-1 similitud perfecta pero en direcciones opuestas
+        #similitud perfecta
 
-    return results
+        return results
+
+    except Exception as e:
+        # Manejar la excepción aquí, por ejemplo, imprimir el mensaje de error
+       # print("Error:", e)
+        return []
+
 """
 # Cargar el índice invertido
 with open('indice_invertido.json', 'r') as index_file:
@@ -86,9 +93,9 @@ for idioma in idiomas_mapeados:
 #print(inverted_index['en'])
 
 # Ejemplo de consulta
-#query = 'faces Misplaced'
-#results = search(query, inverted_index, document_lengths, 21, tfidf_data,'en')
-
+query = 'Tender lover'
+results = search(query, inverted_index, document_lengths, 21, tfidf_data,'en')
+print(results)
 
 
 
@@ -118,7 +125,7 @@ def for_user(query,idioma):
 
     product_names = [get_name(doc_id) for doc_id, _ in results]
     return product_names, round(exe_time, 3)
-"""
+
 #imprimir los resultados
 for doc_id, score in results:
     print("------------------------------------------------")
@@ -126,4 +133,3 @@ for doc_id, score in results:
     print("------------------------------------------------")
     print('\n')
 
-"""
