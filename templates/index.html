@@ -14,7 +14,7 @@
             <h1 class="tittle">
                 Welcome to our clothing search engine
             </h1>
-            
+
             <div class="search-bar">
                 <div class="dropdown">
                     <div id="drop-text" class="dropdown-text">
@@ -28,25 +28,28 @@
                 </div>
 
                 <form class="search-box" action="/" method="POST">
-                    <input name="input_text" type="text" id="search-input" placeholder="Search by our index..." />
+                    <input name="input_text" type="text" id="search-input" placeholder="Search by Our index..." />
+                    <input type="hidden" id="search_option" name="search_option" value="Our_index">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </form>
             </div>
 
             <div class="for_results">
-                {% if product_names %}
-                <!-- <h2>Product Names:</h2> -->
-                <ul>
-                    {% for name in product_names %}
-                    <li>{{ name }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
+                <div class="gallery">
+                    {% if gallery_data %}
+                        {% for link, name in gallery_data %}
+                            <div class="gallery-item">
+                                <img src="{{ link }}" alt="Imagen">
+                                <p>{{ name }}</p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
 
             <div class="for_results">
                 {% if time %}
-                <p> Tiempo de ejecución: {{ time }} segundos</p>
+                    <p> Tiempo de ejecución: {{ time }} segundos</p>
                 {% endif %}
             </div>
 
@@ -63,6 +66,7 @@
         let icon = document.getElementById("icon");
         let list = document.getElementById("list");
         let input = document.getElementById("search-input");
+        let input_so = document.getElementById("search_option");
         let listItems = document.querySelectorAll(".dropdown-list-item");
 
         dropdownBtnText.onclick = function () {
@@ -81,9 +85,11 @@
             item.onclick = function (e) {
                 span.innerText = e.target.innerText;
                 if (e.target.innerText == "Our index") {
-                input.placeholder = "Search by our index...";
+                    input.placeholder = "Search by Our index...";
+                    input_so.value = "Our_index";
                 } else {
-                input.placeholder = "Search by " + e.target.innerText + "...";
+                    input.placeholder = "Search by PSQL...";
+                    input_so.value = "PSQL";
                 }
             };
         }

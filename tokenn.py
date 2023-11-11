@@ -23,7 +23,7 @@ def clean_and_tokenize(text):
 data = {}
 
 # Abrir el archivo CSV
-with open('styleslimpio.csv', 'r') as csv_file:
+with open('Data/styleslimpio.csv', 'r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
 
     for row in csv_reader:

@@ -49,9 +49,9 @@ with open('tfidf_data.json', 'r') as tfidf_file:
 # query = 'casual'
 # results = search(query, inverted_index, document_lengths, 44424, tfidf_data)
 
-#retornar el nombre del articulo
+# retornar el nombre del articulo
 def get_name(id):
-    with open('styleslimpio.csv', 'r') as csv_file:
+    with open('Data/styleslimpio.csv', 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         for row in csv_reader:
             if row['id'] == id:
@@ -59,14 +59,17 @@ def get_name(id):
 
 # Recibe y muestra a frontend
 results = None
-def for_user(query):
+def for_user_index(query):
     s_time = time.time()
     results = search(query, inverted_index, document_lengths, 44424, tfidf_data)
     e_time = time.time()
     exe_time = e_time - s_time
 
+    # product_names = [(doc_id, get_name(doc_id)) for doc_id, _ in results]
     product_names = [get_name(doc_id) for doc_id, _ in results]
-    return product_names, round(exe_time, 3)
+    product_ids = [doc_id for doc_id, _ in results]
+
+    return product_names, product_ids, round(exe_time, 3)
 
 #imprimir los resultados
 # for doc_id, score in results:
