@@ -21,11 +21,24 @@ def get_links(file):
 def main_query():
     product_names = []
     product_ids = []
+    
     time = None
     gallery_links = None
+    gallery_data = None
+
     search_option = ""
+    active_section = ""
+    # is_clothes = True
 
     if request.method == 'POST':
+        active_section = request.form['active_section']
+        print(active_section)
+        """
+        if (active_section == 'songSearch'):
+           is_clothes = False
+        """
+
+    if request.method == 'POST' and active_section == 'clothSearch':
         user_input = request.form['input_text']
         search_option = request.form['search_option']
 
@@ -39,12 +52,15 @@ def main_query():
         # Obtener links de csv y hacer match según resultado de busqueda
         query_links = get_links("images.csv")
         gallery_links = [query_links.get(id, '') for id in product_ids]
-    
-    # gallery_data = zip(gallery_links, product_names)
-    if gallery_links is not None and product_names is not None:
-        gallery_data = zip(gallery_links, product_names)
-    else:
-        gallery_data = []
+
+        # gallery_data = zip(gallery_links, product_names)
+        if gallery_links is not None and product_names is not None:
+            gallery_data = zip(gallery_links, product_names)
+        else:
+            gallery_data = []
+        
+    elif request.method == 'POST' and active_section == 'songSearch':
+        return render_template('song_search.html', gallery_data=gallery_data, time=time)
 
     return render_template('index.html', gallery_data=gallery_data, time=time)
 

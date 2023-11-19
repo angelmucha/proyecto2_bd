@@ -5,7 +5,7 @@ import time
 
 def get_db():
     conn = psycopg2.connect(dbname='bd2_styles', user='postgres', host='localhost', password='1234')
-    # print("Conectado a base de datos - styles")
+    print("Conectado a base de datos - styles")
     return conn
 
 def create_table(table, conn):
@@ -46,19 +46,23 @@ def create_index (table_name, conn):
         cur = conn.cursor()
         cur.execute(f"ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS inverted_index tsvector;")
 
-        # --- Falta darle pesos a los atributos ---
-        cur.execute(f"""UPDATE {table_name} SET inverted_index = to_tsvector('english', 
-                    gender || ' ' || mastercategory || ' ' || subcategory || ' ' || 
-                    articletype || ' ' || basecolour || ' ' || season || ' ' || 
-                    productdisplayname);
+        # --- REVISAR ---
+        cur.execute(f"""UPDATE {table_name} SET inverted_index = 
+                    setweight(to_tsvector('english', gender), 'A') ||
+                    setweight(to_tsvector('english', mastercategory), 'B') ||
+                    setweight(to_tsvector('english', subcategory), 'C') ||
+                    setweight(to_tsvector('english', articletype), 'D') ||
+                    setweight(to_tsvector('english', basecolour), 'D') ||
+                    setweight(to_tsvector('english', season), 'D') ||
+                    setweight(to_tsvector('english', productdisplayname), 'D');
                     """)
-
-        cur.execute(f"CREATE INDEX IF NOT EXISTS {table_name}_inverted_i ON {table_name} USING gin(inverted_index);")
+        
+        # CREATE INDEX IF NOT EXISTS {table_name}_inverted_i ON {table_name} USING gin(inverted_index);
 
         conn.commit()
         print("Indice creado correctamente\n")
     except:
-        print(f"Error al crear índice invertido y columna agregada: {error}")
+        print("Error al crear el indice\n")
     finally:
         cur.close()
 
@@ -67,11 +71,10 @@ def search_using_inverted_index(table_name, search_term):
 
     cur = conn.cursor()
 
-    # --- Falta realizar bien la query insertada  ---
+    # --- REVISAR ---
     search_query = f"""
-        SELECT id, productdisplayname
-        FROM {table_name} 
-        WHERE inverted_index @@ to_tsquery('english', %s) LIMIT 10;
+        SELECT id, productdisplayname FROM {table_name}, to_tsquery(%s) AS query 
+        WHERE inverted_index @@ query ORDER BY ts_rank_cd(inverted_index, query) DESC LIMIT 12;
     """
     cur.execute(search_query, (search_term, ))
     results = cur.fetchall()
@@ -81,6 +84,8 @@ def search_using_inverted_index(table_name, search_term):
     _id = map(str, _id)
 
     return list(_id), list(_productname)
+
+# -----
 
 # Main function - create/insert/index
 def sql_main ():

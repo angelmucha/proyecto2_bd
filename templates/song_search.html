@@ -15,7 +15,7 @@
             <button id="song_button" onclick="showSongSearch()">Songs</button>
         </div>
 
-        <section_1 id="clothingSearch">
+        <section_1 id="clothingSearch" style="display: none;">
             <div class="container">
                 <h1 class="tittle">
                     Welcome to our clothing search engine
@@ -66,7 +66,7 @@
             </div>
         </section_1>
 
-        <section_2 id="songSearch" style="display: none;">
+        <section_2 id="songSearch">
             <div class="container">
                 <h1 class="tittle-songs">
                     Welcome to our songs search engine
@@ -76,7 +76,7 @@
                     <form class="search-box" action="/" method="POST">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="hidden" name="active_section" value="songSearch">
-                        <input type="hidden" id="search-option-songs" name="search-option-songs" value="Our_index">
+                        <input type="hidden" id="search-option-songs" name="search_option" value="Our_index">
                         <input name="input_text" type="text" id="search-input-songs" placeholder="Search by Our index..." />
                     </form>
 
@@ -102,7 +102,7 @@
                                 </div>
                             {% endfor %}
                         {% endif %}
-                    </div>    
+                    </div>
                 </div>
     
                 <div class="for_results">
@@ -138,7 +138,7 @@
         let icon = document.getElementById("icon");
         let list = document.getElementById("list");
         let input = document.getElementById("search-input");
-        let input_so = document.getElementById("search_option");
+        let input_so = document.getElementById("search-option");
         let listItems = document.querySelectorAll(".dropdown-list-item");
 
         let dropdownBtnTextSongs = document.getElementById("drop-text-songs");
@@ -146,7 +146,7 @@
         let iconSongs = document.getElementById("icon-songs");
         let listSongs = document.getElementById("list-songs");
         let inputSongs = document.getElementById("search-input-songs");
-        let inputSoSongs = document.getElementById("search-option-songs");
+        let inputSoSongs = document.getElementById("search_option-songs");
         let listItemsSongs = document.querySelectorAll(".dropdown-list-item-songs");
 
         function closeDropdowns() {
