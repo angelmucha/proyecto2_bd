@@ -5,29 +5,22 @@ import time
 
 #realizar una consulta y retornar segun su scorecosine
 def search(query, inverted_index, document_lengths, total_docs, tfidf_data):
-
     query_tokens = query.split()
-
-    query_tfidf = {}
-    for term in query_tokens:
-        tfidf = calculate_tfidf(term, query_tokens, inverted_index, total_docs)
-        query_tfidf[term] = tfidf
-
+    
+    query_tfidf = {term: calculate_tfidf(term, query_tokens, inverted_index, total_docs) for term in query_tokens}
     query_length = calculate_document_length(query_tokens, inverted_index, total_docs)
 
+    # Obtener los documentos que contienen al menos uno de los términos de la consulta
+    relevant_docs = set(doc_id for term in query_tfidf for doc_id in inverted_index.get(term, {}))
+
     cosine_scores = {}
-    for doc_id, doc_length in document_lengths.items():
-        score = 0.0
-        for term, tfidf in query_tfidf.items():
-            if term in inverted_index:
-                if doc_id in inverted_index[term]:
-                    score += tfidf * tfidf_data[doc_id][term]
-        score /= doc_length * query_length
+    for doc_id in relevant_docs:
+        score = sum(query_tfidf[term] * tfidf_data[doc_id].get(term, 0) for term in query_tfidf)
+        score /= document_lengths[doc_id] * query_length
         cosine_scores[doc_id] = score
 
-    # Ordenar los documentos por puntaje coseno y retornar los 10 mejores
-    results = sorted(cosine_scores.items(), key=lambda x: x[1], reverse=True)[:10]
-    results = [x for x in results if x[1] > 0]
+    # Ordenar los documentos por puntaje coseno y retornar los 10 mejores, no incluir si tiene el score 0
+    results = [(doc_id, score) for doc_id, score in sorted(cosine_scores.items(), key=lambda x: x[1], reverse=True) if score > 0][:10]
 
     return results
 
